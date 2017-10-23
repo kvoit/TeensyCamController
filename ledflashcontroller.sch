@@ -748,15 +748,15 @@ Wire Wire Line
 Text Label 750  1250 0    60   ~ 0
 TRIG_PU3
 Text Label 750  1350 0    60   ~ 0
-TRIG_PU1
+TRIG_PU4
 Text Label 750  1450 0    60   ~ 0
-TRIG_PU2
+TRIG_PU5
 Text Label 750  1550 0    60   ~ 0
-TRIG_PU0
+TRIG_PU2
 Wire Wire Line
 	1250 1650 750  1650
 Text Label 750  1650 0    60   ~ 0
-TRIG_PU4
+TRIG_PU1
 Wire Wire Line
 	1250 2750 750  2750
 Wire Wire Line
@@ -766,7 +766,7 @@ Wire Wire Line
 Wire Wire Line
 	1250 2650 750  2650
 Text Label 750  2450 0    60   ~ 0
-TRIG_PU5
+TRIG_PU0
 Text Label 750  2550 0    60   ~ 0
 TRIG_PU6
 Text Label 750  2650 0    60   ~ 0
@@ -812,11 +812,11 @@ TRIG_PU3
 Wire Wire Line
 	5450 1200 4950 1200
 Text Label 4950 1200 0    60   ~ 0
-TRIG_IO0
+TRIG_IO9
 Wire Wire Line
 	5450 1900 4950 1900
 Text Label 4950 1900 0    60   ~ 0
-TRIG_IO2
+TRIG_IO7
 Wire Wire Line
 	5450 2600 4950 2600
 Text Label 4950 2600 0    60   ~ 0
@@ -828,11 +828,11 @@ TRIG_IO3
 Wire Wire Line
 	6550 1900 7050 1900
 Text Label 7050 1900 2    60   ~ 0
-TRIG_IO5
+TRIG_IO6
 Wire Wire Line
 	6550 1200 7050 1200
 Text Label 7050 1200 2    60   ~ 0
-TRIG_IO1
+TRIG_IO8
 $Comp
 L Conn_02x08_Odd_Even J1
 U 1 1 59B82D2A
@@ -891,27 +891,27 @@ $EndComp
 Wire Wire Line
 	5650 3550 5150 3550
 Text Label 5150 3550 0    60   ~ 0
-TRIG_IO4
+TRIG_IO0
 Wire Wire Line
 	5650 3450 5150 3450
 Text Label 5150 3450 0    60   ~ 0
-TRIG_IO11
+TRIG_IO5
 Wire Wire Line
 	5650 3350 5150 3350
 Text Label 5150 3350 0    60   ~ 0
-TRIG_IO9
+TRIG_IO11
 Wire Wire Line
 	5650 3250 5150 3250
 Text Label 5150 3250 0    60   ~ 0
-TRIG_IO8
+TRIG_IO10
 Wire Wire Line
 	5650 3150 5150 3150
 Text Label 5150 3150 0    60   ~ 0
-TRIG_IO7
+TRIG_IO1
 Wire Wire Line
 	5650 3050 5150 3050
 Text Label 5150 3050 0    60   ~ 0
-TRIG_IO6
+TRIG_IO0
 Wire Wire Line
 	6150 3050 6650 3050
 Text Label 6650 3050 2    60   ~ 0

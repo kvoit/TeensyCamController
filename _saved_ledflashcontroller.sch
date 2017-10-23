@@ -891,27 +891,27 @@ $EndComp
 Wire Wire Line
 	5650 3550 5150 3550
 Text Label 5150 3550 0    60   ~ 0
-TRIG_IO4
+TRIG_IO0
 Wire Wire Line
 	5650 3450 5150 3450
 Text Label 5150 3450 0    60   ~ 0
-TRIG_IO11
+TRIG_IO5
 Wire Wire Line
 	5650 3350 5150 3350
 Text Label 5150 3350 0    60   ~ 0
-TRIG_IO9
+TRIG_IO11
 Wire Wire Line
 	5650 3250 5150 3250
 Text Label 5150 3250 0    60   ~ 0
-TRIG_IO8
+TRIG_IO10
 Wire Wire Line
 	5650 3150 5150 3150
 Text Label 5150 3150 0    60   ~ 0
-TRIG_IO7
+TRIG_IO2
 Wire Wire Line
 	5650 3050 5150 3050
 Text Label 5150 3050 0    60   ~ 0
-TRIG_IO6
+TRIG_IO1
 Wire Wire Line
 	6150 3050 6650 3050
 Text Label 6650 3050 2    60   ~ 0
