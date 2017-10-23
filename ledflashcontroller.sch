@@ -907,11 +907,11 @@ TRIG_IO10
 Wire Wire Line
 	5650 3150 5150 3150
 Text Label 5150 3150 0    60   ~ 0
-TRIG_IO1
+TRIG_IO2
 Wire Wire Line
 	5650 3050 5150 3050
 Text Label 5150 3050 0    60   ~ 0
-TRIG_IO0
+TRIG_IO1
 Wire Wire Line
 	6150 3050 6650 3050
 Text Label 6650 3050 2    60   ~ 0
