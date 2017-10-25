@@ -953,7 +953,7 @@ $EndComp
 Wire Wire Line
 	3450 1850 3950 1850
 Text Label 3950 1850 2    60   ~ 0
-RTC_32kHz
+RTC_SQW
 Wire Wire Line
 	8750 5600 9250 5600
 Text Label 9250 5600 2    60   ~ 0
@@ -1090,7 +1090,7 @@ TRIG_IO11
 Wire Wire Line
 	3450 2650 3950 2650
 Text Label 3950 2650 2    60   ~ 0
-RTC_SQW
+RTC_32kHz
 Wire Wire Line
 	3450 1950 3950 1950
 Text Label 3950 1950 2    60   ~ 0
