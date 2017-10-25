@@ -1,9 +1,10 @@
 EESchema Schematic File Version 2
+LIBS:teensy36_no-center
+LIBS:ldd-1000h
 LIBS:maxim
 LIBS:dmc2700
 LIBS:iso1540
 LIBS:74lvc
-LIBS:custom
 LIBS:ledflashcontroller-rescue
 LIBS:power
 LIBS:device
@@ -63,21 +64,21 @@ $EndComp
 $Comp
 L +5V #PWR02
 U 1 1 59810350
-P 3350 4250
-F 0 "#PWR02" H 3350 4100 50  0001 C CNN
-F 1 "+5V" H 3350 4390 50  0000 C CNN
-F 2 "" H 3350 4250 50  0000 C CNN
-F 3 "" H 3350 4250 50  0000 C CNN
-	1    3350 4250
+P 3550 950
+F 0 "#PWR02" H 3550 800 50  0001 C CNN
+F 1 "+5V" H 3550 1090 50  0000 C CNN
+F 2 "" H 3550 950 50  0000 C CNN
+F 3 "" H 3550 950 50  0000 C CNN
+	1    3550 950 
 	0    1    1    0   
 $EndComp
 Text Label 750  1750 0    60   ~ 0
 DIM1
 Text Label 750  1850 0    60   ~ 0
 DIM2
-Text Label 3500 5050 2    60   ~ 0
+Text Label 3700 1750 2    60   ~ 0
 SDA
-Text Label 3500 4950 2    60   ~ 0
+Text Label 3700 1650 2    60   ~ 0
 SCL
 $Comp
 L +3.3V #PWR03
@@ -160,10 +161,6 @@ F 3 "" H 9450 1950 50  0000 C CNN
 	1    9450 1950
 	1    0    0    -1  
 $EndComp
-Text Label 750  3850 0    60   ~ 0
-SW1
-Text Label 750  3950 0    60   ~ 0
-SW2
 $Comp
 L CONN_01X02 P6
 U 1 1 59820649
@@ -402,9 +399,9 @@ Wire Wire Line
 Wire Wire Line
 	350  50   850  50  
 Wire Wire Line
-	3250 4950 3500 4950
+	3450 1650 3700 1650
 Wire Wire Line
-	3500 5050 3250 5050
+	3700 1750 3450 1750
 Wire Wire Line
 	9650 2350 9900 2350
 Wire Wire Line
@@ -417,10 +414,6 @@ Wire Wire Line
 Connection ~ 9450 2350
 Wire Wire Line
 	9450 1950 9650 1950
-Wire Wire Line
-	750  3850 1250 3850
-Wire Wire Line
-	750  3950 1250 3950
 Wire Wire Line
 	750  3250 1250 3250
 Wire Wire Line
@@ -448,7 +441,7 @@ Wire Wire Line
 Wire Wire Line
 	1250 1050 750  1050
 Wire Wire Line
-	3350 4250 3250 4250
+	3550 950  3450 950 
 Wire Wire Line
 	5950 4350 5950 4400
 Wire Wire Line
@@ -645,17 +638,6 @@ Wire Wire Line
 	9400 3400 9350 3400
 Wire Wire Line
 	9050 3400 9000 3400
-$Comp
-L Teensy3.6 U1
-U 1 1 59B3BB55
-P 2250 3050
-F 0 "U1" H 2250 5350 60  0000 C CNN
-F 1 "Teensy3.6" H 2250 750 60  0000 C CNN
-F 2 "lib_fp:Teensy35_36_no_center" H 2250 3050 60  0001 C CNN
-F 3 "" H 2250 3050 60  0000 C CNN
-	1    2250 3050
-	1    0    0    -1  
-$EndComp
 $Sheet
 S 5450 900  1100 450 
 U 59A988EA
@@ -687,21 +669,13 @@ F4 "TRIG_PU2" I R 6550 2450 60
 F5 "TRIG_IO2" I R 6550 2600 60 
 $EndSheet
 Wire Wire Line
-	1250 4950 750  4950
-Text Label 750  4950 0    60   ~ 0
-VOUT
-Wire Wire Line
 	1250 2250 750  2250
-Wire Wire Line
-	1250 4850 750  4850
 Wire Wire Line
 	1250 1950 750  1950
 Wire Wire Line
 	1250 2050 750  2050
 Wire Wire Line
 	1250 2150 750  2150
-Wire Wire Line
-	1250 5050 750  5050
 Text Label 750  1950 0    60   ~ 0
 TRIG_IO3
 Text Label 750  2050 0    60   ~ 0
@@ -710,34 +684,14 @@ Text Label 750  2150 0    60   ~ 0
 TRIG_IO6
 Text Label 750  2250 0    60   ~ 0
 TRIG_IO7
-Text Label 750  5050 0    60   ~ 0
-TRIG_IO0
-Text Label 750  4850 0    60   ~ 0
-TRIG_IO5
 Wire Wire Line
-	3250 4550 3750 4550
+	3450 1250 3950 1250
 Wire Wire Line
-	3250 4650 3750 4650
-Text Label 3750 4650 2    60   ~ 0
+	3450 1350 3950 1350
+Text Label 3950 1350 2    60   ~ 0
 TRIG_IO1
-Text Label 3750 4550 2    60   ~ 0
+Text Label 3950 1250 2    60   ~ 0
 TRIG_IO2
-Wire Wire Line
-	1250 4350 750  4350
-Wire Wire Line
-	1250 4050 750  4050
-Wire Wire Line
-	1250 4150 750  4150
-Wire Wire Line
-	1250 4250 750  4250
-Text Label 750  4050 0    60   ~ 0
-TRIG_IO8
-Text Label 750  4150 0    60   ~ 0
-TRIG_IO9
-Text Label 750  4250 0    60   ~ 0
-TRIG_IO10
-Text Label 750  4350 0    60   ~ 0
-TRIG_IO11
 Wire Wire Line
 	1250 1550 750  1550
 Wire Wire Line
@@ -1001,16 +955,8 @@ F 3 "" H 10700 6100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1250 4450 750  4450
-Text Label 750  4450 0    60   ~ 0
-RTC_SQW
-Wire Wire Line
-	1250 5150 750  5150
-Wire Wire Line
-	3250 5150 3750 5150
-Text Label 750  5150 0    60   ~ 0
-RTC_RST
-Text Label 3750 5150 2    60   ~ 0
+	3450 1850 3950 1850
+Text Label 3950 1850 2    60   ~ 0
 RTC_32kHz
 Wire Wire Line
 	10000 5550 10500 5550
@@ -1098,4 +1044,59 @@ Text Label 10050 6200 0    60   ~ 0
 RTC_VBAT
 Wire Wire Line
 	10500 6200 10050 6200
+$Comp
+L Teensy3.6_no-center U1
+U 1 1 59F0CB59
+P 2350 3050
+F 0 "U1" H 2350 5350 60  0000 C CNN
+F 1 "Teensy3.6_no-center" H 2350 2650 60  0000 C CNN
+F 2 "lib_fp:Teensy35_36_no-center" H 2250 3050 60  0001 C CNN
+F 3 "" H 2250 3050 60  0000 C CNN
+	1    2350 3050
+	1    0    0    -1  
+$EndComp
+Text Label 3950 3250 2    60   ~ 0
+SW1
+Text Label 3950 3150 2    60   ~ 0
+SW2
+Wire Wire Line
+	3950 3250 3450 3250
+Wire Wire Line
+	3950 3150 3450 3150
+Wire Wire Line
+	3450 2150 3950 2150
+Text Label 3950 2150 2    60   ~ 0
+VOUT
+Wire Wire Line
+	3450 2250 3950 2250
+Wire Wire Line
+	3450 2050 3950 2050
+Text Label 3950 2050 2    60   ~ 0
+TRIG_IO0
+Text Label 3950 2250 2    60   ~ 0
+TRIG_IO5
+Wire Wire Line
+	3450 2750 3950 2750
+Wire Wire Line
+	3450 3050 3950 3050
+Wire Wire Line
+	3450 2950 3950 2950
+Wire Wire Line
+	3450 2850 3950 2850
+Text Label 3950 3050 2    60   ~ 0
+TRIG_IO8
+Text Label 3950 2950 2    60   ~ 0
+TRIG_IO9
+Text Label 3950 2850 2    60   ~ 0
+TRIG_IO10
+Text Label 3950 2750 2    60   ~ 0
+TRIG_IO11
+Wire Wire Line
+	3450 2650 3950 2650
+Text Label 3950 2650 2    60   ~ 0
+RTC_SQW
+Wire Wire Line
+	3450 1950 3950 1950
+Text Label 3950 1950 2    60   ~ 0
+RTC_RST
 $EndSCHEMATC
