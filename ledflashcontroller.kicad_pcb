@@ -3,7 +3,7 @@
   (general
     (links 225)
     (no_connects 0)
-    (area 29.924999 29.924999 130.075001 130.075001)
+    (area 29.664999 26.418399 142.064286 151.875001)
     (thickness 1.6)
     (drawings 8)
     (tracks 992)
@@ -65,7 +65,7 @@
     (grid_origin 130 130)
     (visible_elements FFFEFFFF)
     (pcbplotparams
-      (layerselection 0x01000_00000000)
+      (layerselection 0x01000_80000001)
       (usegerberextensions false)
       (excludeedgelayer true)
       (linewidth 0.100000)
@@ -79,8 +79,8 @@
       (hpglpenoverlay 2)
       (psnegative false)
       (psa4output false)
-      (plotreference true)
-      (plotvalue true)
+      (plotreference false)
+      (plotvalue false)
       (plotinvisibletext false)
       (padsonsilk false)
       (subtractmaskfromsilk false)
@@ -88,7 +88,7 @@
       (mirror false)
       (drillshape 0)
       (scaleselection 1)
-      (outputdirectory /home/flo/ownCloud/PhD/ledflashcontroller/gerber/))
+      (outputdirectory gerber_v2/))
   )
 
   (net 0 "")
