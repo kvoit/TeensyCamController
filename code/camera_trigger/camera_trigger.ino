@@ -1,7 +1,5 @@
 #include "TeensyDelay.h"    // https://github.com/luni64/TeensyDelay
-#include <SerialCommand.h>  // https://github.com/scogswell/ArduinoSerialCommand
 
-SerialCommand SCmd;
 IntervalTimer frameTimer;
 
 // Onboard LED
@@ -26,11 +24,11 @@ const uint8_t PIN_TRIG_PU1 = 2;
 
 volatile bool triggerRunning = false;
 
-volatile float framerate = 50; // Hz
+volatile float framerate = 150; // Hz
 volatile float frame_period = 1000. / framerate; // ms
 const float framerate_min = 0.5; // Hz
 
-volatile float exposure_time = 10; // ms
+volatile float exposure_time = 2.5; // ms
 const float exposure_time_min = 0.5; // ms
 volatile bool timerExposure = true;
 
@@ -38,137 +36,79 @@ volatile bool timerExposure = true;
 volatile long camOnMicros = 0.;
 
 
+char* cmd;
+float arg;
 
-
-void infoCallback()
-{
-  Serial.println(F("------------------------------------------"));
-  Serial.println(F("SUPPORTED COMMANDS:"));
-  Serial.println(F("------------------------------------------"));
-  Serial.println(F("INFO: Print this text"));
-  Serial.println(F("------------------------------------------"));
-}
-
-void unknownCallback()
-{
-  Serial.println("Unknown command"); 
-}
 
 void camOnCallback()
 {
   digitalWriteFast(PIN_TRIG_IO1, LOW);
   pinMode(PIN_TRIG_IO1, OUTPUT);
   camOnMicros = micros();
-  
-  //LEDOnCallback();
-  //Serial.println("Trigger signal on"); 
 }
 
 void camOffCallback()
 {
   pinMode(PIN_TRIG_IO1, INPUT);
   digitalWriteFast(PIN_TRIG_IO1, LOW); // digitalWriteFast?
-
-  //LEDOffCallback();
-  //Serial.println("Trigger signal off"); 
-}
-
-void LEDOnCallback()
-{
-  digitalWrite(PIN_LED, HIGH);
-  Serial.println("LED on"); 
-}
-
-void LEDOffCallback()
-{
-  digitalWrite(PIN_LED, LOW);
-  Serial.println("LED off"); 
-}
-
-void pullupOnCallback()
-{
-  digitalWrite(PIN_TRIG_PU1, HIGH);
-  Serial.println("Pullup on"); 
-}
-
-void pullupOffCallback()
-{
-  digitalWrite(PIN_TRIG_PU1, LOW);
-  Serial.println("Pullup off"); 
-}
-
-void setFrameRateCallback()
-{
-  char *arg; 
-  arg = SCmd.next();
-  if (arg == NULL) 
-  {
-    return;
-  } 
-  
-  setFrameRate(atof(arg));
 }
 
 void setFrameRate(float framerate_a)
 {
   framerate = max(floor(10. * framerate_a) / 10., framerate_min); // truncates to one significant digit
   frame_period = 1000. / framerate; // ms
-  Serial.print("Frame rate: ");
-  Serial.print(framerate);
-  Serial.print(" Hz / Frame period: ");
-  Serial.print(frame_period);
-  Serial.println(" ms");
-}
-
-void setExposureTimeCallback()
-{
-  char *arg; 
-  arg = SCmd.next();
-  if (arg == NULL) 
-  {
-    return;
-  } 
-  
-  setExposureTime(atof(arg));
 }
 
 void setExposureTime(float exposure_time_a)
 {
   exposure_time = max(floor(10. * exposure_time_a) / 10., exposure_time_min); // truncates to one significant digit 
-  Serial.print("Exposure time: ");
-  Serial.print(exposure_time);
-  Serial.println(" ms");
 }
 
-void triggerOnCallback_old()
-{
-  if (!triggerRunning & (exposure_time != 0))
-  {
-    Serial.print("Trigger on with ");
-    Serial.print("frame rate = ");
-    Serial.print(framerate);
-    Serial.print(" Hz and exposure time = ");
-    Serial.print(exposure_time);
-    Serial.println(" ms");
-    triggerRunning = true;
-    frameTimer.end();
-    frameTimer.begin(camOnCallback, 1000. * frame_period); // 100UL ?
-  } 
-}
+//void triggerOnCallback()
+//{
+//  if (!triggerRunning)
+//  {
+//    triggerRunning = true;
+//    digitalWrite(PIN_LED, HIGH);
+//    //frameTimer.end();
+//    frameTimer.begin(triggerOn, 1000. * frame_period);
+//  }
+//}
+//
+//void triggerOn()
+//{
+//  camOnCallback();
+//  // TeensyDelay::Trigger() does not work accordingly for delays >= 32
+//  if (exposure_time < 32)
+//  {
+//    timerExposure = true;
+//    TeensyDelay::trigger(1000. * exposure_time, 0); // cam off
+//  }
+//  else
+//  {
+//    timerExposure = false;
+//    camOnMicros = micros();
+//  }
+//}
 
 void triggerOnCallback()
 {
-  if (!triggerRunning & (exposure_time != 0))
+  if (!triggerRunning)
   {
-    Serial.println("Trigger on");
-    Serial.print("Frame rate: ");
-    Serial.print(framerate);
-    Serial.println(" Hz");
-    Serial.print("Exposure time: ");
-    Serial.print(exposure_time);
-    Serial.println(" ms");
     triggerRunning = true;
+    digitalWrite(PIN_LED, HIGH);
     //frameTimer.end();
+
+    // TeensyDelay::Trigger() does not work accordingly for delays >= 32
+    if (exposure_time < 32)
+    {
+      timerExposure = true;
+    }
+    else
+    {
+      timerExposure = false;
+    }
+    
     frameTimer.begin(triggerOn, 1000. * frame_period);
   }
 }
@@ -176,16 +116,11 @@ void triggerOnCallback()
 void triggerOn()
 {
   camOnCallback();
-  // TeensyDelay::Trigger() does not work accordingly for delays >= 32
-  if (exposure_time < 32)
+  camOnMicros = micros();
+  Serial.println(camOnMicros);
+  if (timerExposure)
   {
-    timerExposure = true;
     TeensyDelay::trigger(1000. * exposure_time, 0); // cam off
-  }
-  else
-  {
-    timerExposure = false;
-    camOnMicros = micros();
   }
 }
 
@@ -193,11 +128,24 @@ void triggerOffCallback()
 {
   if (triggerRunning)
   {
-    Serial.println("Trigger off");
     triggerRunning = false;
+    digitalWrite(PIN_LED, LOW);
     frameTimer.end();
     camOffCallback();
   } 
+}
+
+void read_cmd_and_arg(char* &cmd, float &arg)
+{
+  char cmd_all [256];
+  char* arg_str;
+
+  sprintf(cmd_all, Serial.readString().c_str());
+  
+  cmd = strtok(cmd_all, " ");
+//  a = int(atof(cmd_str_separated));
+  arg_str = strtok(NULL, " ");
+  arg = atof(arg_str);
 }
 
 
@@ -211,19 +159,15 @@ void setup() {
   digitalWrite(PIN_TRIG_PU1, HIGH);
 
   TeensyDelay::begin();
-  TeensyDelay::addDelayChannel(camOffCallback);    //setup channel 0
+  TeensyDelay::addDelayChannel(camOffCallback); //setup channel 0
 
+  // Initialize variables
+//  sprintf(cmd, "NO_CMD");
+//  arg = -1.0;
 
   // Set up serial
   Serial.begin(115200);
-
-  // Set up serial commands
-  SCmd.addCommand("TRIGGER_ON", triggerOnCallback);
-  SCmd.addCommand("TRIGGER_OFF", triggerOffCallback);
-  SCmd.addCommand("FRAMERATE", setFrameRateCallback);
-  SCmd.addCommand("EXPOSURE", setExposureTimeCallback);
-  SCmd.addCommand("INFO", infoCallback);
-  SCmd.addDefaultHandler(unknownCallback);
+  delay(1000); // wait for serial 
 }
 
 void loop() {
@@ -234,5 +178,32 @@ void loop() {
     camOffCallback();
   }
   
-  SCmd.readSerial();
+  if (Serial.available() > 0)
+  {
+    read_cmd_and_arg(cmd, arg);
+//    Serial.print("cmd: ");
+//    Serial.println(cmd);
+//    Serial.print("arg: ");
+//    Serial.println(arg);
+
+    if (strcmp(cmd, "TRIGGER_ON") == 0)
+    {
+      triggerOnCallback();
+    }
+    else if (strcmp(cmd, "TRIGGER_OFF") == 0)
+    {
+      triggerOffCallback();
+    }
+    else if (strcmp(cmd, "FRAMERATE") == 0)
+    {
+      setFrameRate(arg);
+    }
+    else if (strcmp(cmd, "EXPOSURE") == 0)
+    {
+      setExposureTime(arg);
+    }
+    sprintf(cmd, "NO_CMD");
+    arg = 0.0;
+    Serial.clear();
+  }
 }
