@@ -21,7 +21,7 @@ const uint8_t PIN_TRIG_PU1 = 2;
 //const uint8_t PIN_TRIG_PU5 = 6;
 //const uint8_t PIN_TRIG_PU6 = 0; // no pullup ?
 
-
+// not necessary
 volatile bool triggerRunning = false;
 
 volatile float framerate = 150; // Hz
@@ -31,7 +31,6 @@ const float framerate_min = 0.5; // Hz
 volatile float exposure_time = 2.5; // ms
 const float exposure_time_min = 0.5; // ms
 volatile bool timerExposure = true;
-
 
 volatile long camOnMicros = 0.;
 
@@ -63,33 +62,6 @@ void setExposureTime(float exposure_time_a)
 {
   exposure_time = max(floor(10. * exposure_time_a) / 10., exposure_time_min); // truncates to one significant digit 
 }
-
-//void triggerOnCallback()
-//{
-//  if (!triggerRunning)
-//  {
-//    triggerRunning = true;
-//    digitalWrite(PIN_LED, HIGH);
-//    //frameTimer.end();
-//    frameTimer.begin(triggerOn, 1000. * frame_period);
-//  }
-//}
-//
-//void triggerOn()
-//{
-//  camOnCallback();
-//  // TeensyDelay::Trigger() does not work accordingly for delays >= 32
-//  if (exposure_time < 32)
-//  {
-//    timerExposure = true;
-//    TeensyDelay::trigger(1000. * exposure_time, 0); // cam off
-//  }
-//  else
-//  {
-//    timerExposure = false;
-//    camOnMicros = micros();
-//  }
-//}
 
 void triggerOnCallback()
 {

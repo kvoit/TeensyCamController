@@ -23,7 +23,7 @@ def is_int(arg):
     return True
 
 
-class tennsy_comunicator:
+class tennsy_communicator:
     def __init__(self):
         self.runProgram = True
         self.filePath_is_set = False
@@ -33,9 +33,9 @@ class tennsy_comunicator:
         self.exposure = 2.5  # ms
 
         self.ser = self.teensyConnect()
-        t1 = threading.Thread(target=self.teensyRead,
-                              daemon=True)
-        t1.start()
+#        t1 = threading.Thread(target=self.teensyRead,
+#                              daemon=True)
+#        t1.start()
         t2 = threading.Thread(target=self.teensyWrite)
         t2.start()
 
@@ -53,8 +53,6 @@ class tennsy_comunicator:
     def exit_program(self):
         if not(self.runTrigger):
             self.ser.close()
-            if (self.filePath_is_set):
-                self.f.close()
             self.runProgram = False
         else:
             print('Stop trigger signal first')
@@ -69,6 +67,11 @@ class tennsy_comunicator:
                     self.f = open(self.filePath, 'w+')
                     print("File path is set")
                     print('file path:\t{:s}'.format(self.filePath))
+                    
+                    t1 = threading.Thread(target=self.teensyRead,
+                                          daemon=True)
+                    t1.start()
+                    
                 else:
                     print('File already exists')
             else:
@@ -83,6 +86,7 @@ class tennsy_comunicator:
             runTrigger_str = 'Off'
         print("------------------------------------------")
         print("STATUS:")
+        print("------------------------------------------")
         print("trigger signal:\t{:s}".format(runTrigger_str))
         print("file path:\t{:s}".format(self.filePath))
         print("framerate:\t{:d} Hz".format(self.framerate))
@@ -111,6 +115,7 @@ class tennsy_comunicator:
         self.ser.write(self.cmd.encode())
         print("Trigger signal is off")
         if (self.filePath_is_set):
+            self.f.close()
             self.filePath = 'n/a'
             self.filePath_is_set = False
             print("File path was set back to {:s}".format(self.filePath))
@@ -147,15 +152,15 @@ class tennsy_comunicator:
         while(self.runProgram):
             self.cmd = input()
             self.cmd_split = self.cmd.split(' ')
-            if (self.cmd_split[0] == "EXIT"):
+            if (self.cmd == "EXIT"):
                 self.exit_program()
             elif (self.cmd_split[0] == "FILE"):
                 self.set_filePath()
-            elif (self.cmd_split[0] == "INFO"):
+            elif (self.cmd == "INFO"):
                 self.print_info()
-            elif (self.cmd_split[0] == "TRIGGER_ON"):
+            elif (self.cmd == "TRIGGER_ON"):
                 self.turn_trigger_on()
-            elif (self.cmd_split[0] == "TRIGGER_OFF"):
+            elif (self.cmd == "TRIGGER_OFF"):
                 self.turn_trigger_off()
             elif (self.cmd_split[0] == "FRAMERATE"):
                 self.set_framerate()
@@ -166,13 +171,10 @@ class tennsy_comunicator:
             self.cmd_split = list()
 
     def teensyRead(self):
-        while(True):
+        while(self.runProgram):
             line = self.ser.readline().decode('ascii')
-            if (self.filePath_is_set):
-                self.f.write(line)
-#            else:
-#                print(line)
+            self.f.write(line)
 
 
 if __name__ == '__main__':
-    tennsy_comunicator()
+    tennsy_communicator()
