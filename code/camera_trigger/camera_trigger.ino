@@ -43,7 +43,6 @@ void camOnCallback()
 {
   digitalWriteFast(PIN_TRIG_IO1, LOW);
   pinMode(PIN_TRIG_IO1, OUTPUT);
-  camOnMicros = micros();
 }
 
 void camOffCallback()
