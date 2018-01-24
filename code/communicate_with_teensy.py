@@ -134,7 +134,7 @@ class tennsy_communicator:
         print("Trigger signal is off")
         if (self.filePath_is_set):
             self.runRead.clear()
-            self.tRead.join()
+            self.tRead.join()  # wait for reading thread
             self.file.close()
             self.filePath = "n/a"
             self.filePath_is_set = False
