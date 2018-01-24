@@ -26,6 +26,7 @@ def is_int(arg):
 class tennsy_communicator:
     def __init__(self):
         self.runWrite = True
+        self.runRead = threading.Event()
         self.filePath_is_set = False
         self.filePath = "n/a"
         self.runTrigger = False
@@ -33,7 +34,7 @@ class tennsy_communicator:
         self.exposure = 2.5  # ms
 
         self.ser = self.teensyConnect()
-        
+
         self.cmd = "FRAMERATE {:.0f}".format(self.framerate)
         self.cmd_split = self.cmd.split(" ")
         self.set_framerate()
@@ -42,10 +43,10 @@ class tennsy_communicator:
         self.set_exposure()
         self.cmd = ""
         self.cmd_split = list()
-        
-        t2 = threading.Thread(target=self.teensyWrite,
-                              daemon=False)
-        t2.start()
+
+        self.tWrite = threading.Thread(target=self.teensyWrite,
+                                       daemon=False)
+        self.tWrite.start()
 
     def teensyConnect(self):
         ports = list(port_list.comports())
@@ -59,7 +60,7 @@ class tennsy_communicator:
 #                port = p.device
 #                break
         ser = serial.Serial(port)
-        time.sleep(1.0)
+        time.sleep(1.0)  # wait for Teensy
         print("Connected to {:s}".format(port))
         return ser
 
@@ -79,7 +80,7 @@ class tennsy_communicator:
                         self.filePath_is_set = True
                         self.filePath = self.cmd_split[1]
                         print("File path is set")
-                        print("file path:\t{:s}".format(self.filePath))                    
+                        print("file path:\t{:s}".format(self.filePath))
                     else:
                         print("File already exists")
                 else:
@@ -94,33 +95,34 @@ class tennsy_communicator:
             runTrigger_str = "On"
         else:
             runTrigger_str = "Off"
-        print("------------------------------------------")
+        print("--------------------------------------------------------------")
         print("STATUS:")
-        print("------------------------------------------")
+        print("--------------------------------------------------------------")
         print("trigger signal:\t{:s}".format(runTrigger_str))
         print("file path:\t{:s}".format(self.filePath))
         print("framerate:\t{:d} Hz".format(self.framerate))
         print("exposure time:\t{:.1f} ms".format(self.exposure))
-        print("------------------------------------------")
+        print("--------------------------------------------------------------")
         print("SUPPORTED COMMANDS:")
-        print("------------------------------------------")
+        print("--------------------------------------------------------------")
         print("TRIGGER_ON:\tStart trigger signal")
         print("TRIGGER_OFF:\tStop trigger signal")
         print("FRAMERATE ARG:\tSet framerate to ARG")
         print("EXPOSURE ARG:\tSet exposure time to ARG")
-        print("FILE ARG\tSet file path for trigger signal documentation to ARG")
+        print("FILE ARG\tSet file path to record trigger signal to ARG")
         print("INFO:\t\tPrint this text")
         print("EXIT:\t\tExit program")
-        print("------------------------------------------")
+        print("--------------------------------------------------------------")
 
     def turn_trigger_on(self):
-        self.runTrigger = True     
+        self.runTrigger = True
         if (self.filePath_is_set):
             self.file = open(self.filePath, "xb")
-            t1 = threading.Thread(target=self.teensyRead,
-                                  daemon=True)
-            t1.start()
-            time.sleep(1.0)
+            time.sleep(0.1)  # wait for file
+            self.runRead.set()
+            self.tRead = threading.Thread(target=self.teensyRead,
+                                          daemon=False)
+            self.tRead.start()
         self.ser.write(self.cmd.encode())
         print("Trigger signal is on")
         print("framerate:\t{:d} Hz".format(self.framerate))
@@ -131,7 +133,8 @@ class tennsy_communicator:
         self.ser.write(self.cmd.encode())
         print("Trigger signal is off")
         if (self.filePath_is_set):
-            time.sleep(1.0)
+            self.runRead.clear()
+            self.tRead.join()
             self.file.close()
             self.filePath = "n/a"
             self.filePath_is_set = False
@@ -195,7 +198,7 @@ class tennsy_communicator:
             self.cmd_split = list()
 
     def teensyRead(self):
-        while(True):
+        while(self.runRead.is_set()):
             self.file.write(self.ser.readline())
 
 
