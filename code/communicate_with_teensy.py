@@ -51,11 +51,13 @@ class tennsy_communicator:
     def teensyConnect(self):
         ports = list(port_list.comports())
         for p in ports:
+            # windows
             p_description_split = p.description.split(' ')
             for i in p_description_split:
                 if (i == "Teensy"):
                     port = p.device
                     break
+            # linux
 #            if (p.description == 'USB Serial'):
 #                port = p.device
 #                break
@@ -105,20 +107,20 @@ class tennsy_communicator:
         print("--------------------------------------------------------------")
         print("SUPPORTED COMMANDS:")
         print("--------------------------------------------------------------")
-        print("TRIGGER_ON:\tStart trigger signal")
-        print("TRIGGER_OFF:\tStop trigger signal")
-        print("FRAMERATE ARG:\tSet framerate to ARG")
+        print("EXIT:\t\tExit program")
         print("EXPOSURE ARG:\tSet exposure time to ARG")
         print("FILE ARG\tSet file path to record trigger signal to ARG")
+        print("FRAMERATE ARG:\tSet framerate to ARG")
         print("INFO:\t\tPrint this text")
-        print("EXIT:\t\tExit program")
+        print("TRIGGER_OFF:\tStop trigger signal")
+        print("TRIGGER_ON:\tStart trigger signal")
         print("--------------------------------------------------------------")
 
     def turn_trigger_on(self):
         self.runTrigger = True
         if (self.filePath_is_set):
             self.file = open(self.filePath, "xb")
-            time.sleep(0.1)  # wait for file
+            time.sleep(0.2)  # wait for file
             self.runRead.set()
             self.tRead = threading.Thread(target=self.teensyRead,
                                           daemon=False)
@@ -133,6 +135,7 @@ class tennsy_communicator:
         self.ser.write(self.cmd.encode())
         print("Trigger signal is off")
         if (self.filePath_is_set):
+            time.sleep(0.2)  # wait for Teensy
             self.runRead.clear()
             self.tRead.join()  # wait for reading thread
             self.file.close()

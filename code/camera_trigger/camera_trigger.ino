@@ -33,6 +33,7 @@ const float exposure_time_min = 0.5; // ms
 volatile bool timerExposure = true;
 
 volatile long camOnMicros = 0.;
+volatile long triggerStart = 0;
 
 
 char* cmd;
@@ -79,7 +80,8 @@ void triggerOnCallback()
     {
       timerExposure = false;
     }
-    
+
+    triggerStart = micros();
     frameTimer.begin(triggerOn, 1000. * frame_period);
   }
 }
@@ -88,7 +90,7 @@ void triggerOn()
 {
   camOnCallback();
   camOnMicros = micros();
-  Serial.println(camOnMicros);
+  Serial.println(camOnMicros - triggerStart);
   if (timerExposure)
   {
     TeensyDelay::trigger(1000. * exposure_time, 0); // cam off
