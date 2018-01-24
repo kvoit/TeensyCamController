@@ -61,7 +61,8 @@ class tennsy_communicator:
 #            if (p.description == 'USB Serial'):
 #                port = p.device
 #                break
-        ser = serial.Serial(port)
+        ser = serial.Serial(port,
+                            timeout=5.0)  # timeout should be equal to maximum frame period
         time.sleep(1.0)  # wait for Teensy
         print("Connected to {:s}".format(port))
         return ser
@@ -120,7 +121,7 @@ class tennsy_communicator:
         self.runTrigger = True
         if (self.filePath_is_set):
             self.file = open(self.filePath, "xb")
-            time.sleep(0.2)  # wait for file
+            time.sleep(1.0)  # wait for file
             self.runRead.set()
             self.tRead = threading.Thread(target=self.teensyRead,
                                           daemon=False)
@@ -135,7 +136,8 @@ class tennsy_communicator:
         self.ser.write(self.cmd.encode())
         print("Trigger signal is off")
         if (self.filePath_is_set):
-            time.sleep(0.2)  # wait for Teensy
+            print('Wait until file path is set back')
+            time.sleep(1.0)  # wait for Teensy
             self.runRead.clear()
             self.tRead.join()  # wait for reading thread
             self.file.close()
